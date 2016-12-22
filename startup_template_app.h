@@ -53,45 +53,45 @@
 /**
  * @brief Blood Pressure measurement characteristic UUID
  */
-#define BLOOD_PRESSURE_MEASUREMENT_CHAR_UUID										(0x2A35)
+#define BLOOD_PRESSURE_MEASUREMENT_CHAR_UUID						(0x2A35)
 
 /**
  * @brief Intermediate Cuff Pressure characteristic UUID
  */
-#define INTERMEDIATE_CUFF_PRESSURE_CHAR_UUID										(0x2A36)
+#define INTERMEDIATE_CUFF_PRESSURE_CHAR_UUID						(0x2A36)
 
 /**
  * @brief Blood Pressure Feature characteristic UUID
  */
-#define BLOOD_PRESSURE_FEATURE_CHAR_UUID											(0x2A49)
+#define BLOOD_PRESSURE_FEATURE_CHAR_UUID						(0x2A49)
 
 /**
  * @brief Total no of characteristics in Blood Pressure service
  */
-#define BLP_TOTAL_CHARATERISTIC_NUM													(3)
+#define BLP_TOTAL_CHARATERISTIC_NUM							(3)
 
 
 /**
  * @brief Notification Mask
  */
-#define BLP_NOTIFICATION															(1)
+#define BLP_NOTIFICATION								(1)
 
 /**
  * @brief Disabling the Indication
  */
-#define BLP_INDICATION																(2)
+#define BLP_INDICATION									(2)
 
 /** 
  * @brief notification enable
  *
  */
-#define BLP_NOTIFICATION_ENABLE														 (1)
+#define BLP_NOTIFICATION_ENABLE								(1)
 
-#define BLP_NOTIFICATION_DISABLE													 (2)
+#define BLP_NOTIFICATION_DISABLE							(2)
 
-#define BLP_INDICATION_ENABLE														 (3)
+#define BLP_INDICATION_ENABLE								(3)
 
-#define BLP_INDICATION_DISABLE														 (4)
+#define BLP_INDICATION_DISABLE								(4)
 
 /**
  * @brief maximum size of flags field of bp mm characteristic in bytes
@@ -111,7 +111,7 @@
 /**
  * @brief maximum size of map  field of blp mm characteristic in bytes
  */
-#define BLP_MAP_VAL_SIZE		                                                     (2)
+#define BLP_MAP_VAL_SIZE		                                             (2)
 
 /**
  * @brief maximum size of time stamp field of  blp mm characteristic in bytes
@@ -152,7 +152,7 @@ typedef struct hr_gatt_service_handler {
 } blp_gatt_service_handler_t;
 
 /************************************************************************/
-/*						  Functions 			                        */
+/*				Functions		 		*/
 /************************************************************************/
 
 /**@brief Blood Pressure service and characteristic initialization(Called only once
@@ -193,7 +193,7 @@ uint8_t blp_char_change_handler(blp_gatt_service_handler_t *blp_primary_service,
 /**
  * @brief Timer Interval which is 1 second
  */
-#define TIMER_INTERVAL									(1)
+#define TIMER_INTERVAL								(1)
 
 /**
  * @brief Indication timer the time taken to send an indication
@@ -203,12 +203,12 @@ uint8_t blp_char_change_handler(blp_gatt_service_handler_t *blp_primary_service,
 /**
  * @brief APP_DEFAULT_VAL default value for data in application
  */
-#define APP_DEFAULT_VAL									(1)
+#define APP_DEFAULT_VAL								(1)
 
 /**
  * @brief BLP_DATA_LEN the blp measurment characteristic data length
  */
-#define BLP_DATA_LEN									(19)
+#define BLP_DATA_LEN								(19)
 
 /**
  * @brief Mask for flags field in the blp measurement value
@@ -242,14 +242,14 @@ uint8_t blp_char_change_handler(blp_gatt_service_handler_t *blp_primary_service,
 #define DIASTOLIC_MIN_KPA									(70)
 #define DIASTOLIC_MAX_KPA									(110)
 
-#define MAP_MIN_KPA											(70)
-#define MAP_MAX_KPA											(110)
+#define MAP_MIN_KPA										(70)
+#define MAP_MAX_KPA										(110)
 
 #define PULSE_RATE_MIN										(60)
 #define PULSE_RATE_MAX										(120)
 
-#define USERID_1											(1)
-#define USERID_2											(2)
+#define USERID_1										(1)
+#define USERID_2										(2)
 
 /**
  * @brief Default Time stamp Values
@@ -271,11 +271,11 @@ uint8_t blp_char_change_handler(blp_gatt_service_handler_t *blp_primary_service,
  */
 #define SYSTOLIC_MMHG										(0)
 #define DIASTOLIC_MMHG										(1)
-#define MAP_MMHG											(2)
+#define MAP_MMHG										(2)
 #define SYSTOLIC_KPA										(3)
 #define DIASTOLIC_KPA										(4)
-#define MAP_KPA												(5)
-#define PULSE_RATE											(6)
+#define MAP_KPA											(5)
+#define PULSE_RATE										(6)
 #define INTERIM_SYS_MMHG									(7)
 #define INTERIM_SYS_KPA										(8)
 
@@ -317,7 +317,7 @@ static at_ble_status_t app_indication_confirmation_handler(void *params);
 //	<i> Defines interval at which advertisement timeout in sec.
 //	<i> Default: 655
 //	<id> blp_sensor_adv_timeout
-#define BLP_SENSOR_ADV_TIMEOUT							(655) // 10 min
+#define BLP_SENSOR_ADV_TIMEOUT								(655) // 10 min
 
 /** @brief scan_resp_len is the length of the scan response data */
 //	<o> Scan Response Buffer <1-20>
@@ -336,7 +336,7 @@ static at_ble_status_t app_indication_confirmation_handler(void *params);
 
 
 /** @brief HR_SENSOR_ADV_DATA_UUID_TYPE is complete 16 bit uuid type*/
-#define BLP_SENSOR_ADV_DATA_COMP_16_UUID_TYPE			(0x03)
+#define BLP_SENSOR_ADV_DATA_COMP_16_UUID_TYPE				(0x03)
 
 /** @brief HR_SENSOR_ADV_DATA_UUID_LEN the total length for hr uuid and dis uuid */
 #define BLP_SENSOR_ADV_DATA_UUID_LEN					(4)
@@ -476,7 +476,7 @@ void blp_disconnection(void);
 //	<s.20>Manufacture Name
 //	<i> String Descriptor describing Manufacture Name.
 //	<id> default_manufacturer_name
-#define DEFAULT_MANUFACTURER_NAME					("ATMEL")
+#define DEFAULT_MANUFACTURER_NAME				("ATMEL")
 
 /** @brief User should set the length based on DEFAULT_MANUFACTURER_NAME */
 #define DIS_CHAR_MANUFACTURER_NAME_INIT_LEN			(0x05)
@@ -488,7 +488,7 @@ void blp_disconnection(void);
 //	<s.20>Model Number
 //	<i>String Descriptor describing Model Number.
 //	<id> default_model_number
-#define DEFAULT_MODEL_NUMBER						("BLE DEVICE")
+#define DEFAULT_MODEL_NUMBER					("BLE DEVICE")
 
 /** @brief User should set the length based on DEFAULT_MODEL_NUMBER*/
 #define DIS_CHAR_MODEL_NUMBER_INIT_LEN				(0x0a)
@@ -500,7 +500,7 @@ void blp_disconnection(void);
 //  <s.20>Serial Number
 //  <i>String Descriptor describing Serial Number.
 //	<id> default_serial_number
-#define DEFAULT_SERIAL_NUMBER						("BTLC1000/SAMB11")
+#define DEFAULT_SERIAL_NUMBER				("BTLC1000/SAMB11")
 
 /** @brief User should set the length based on  DEFAULT_SERIAL_NUMBER*/
 #define DIS_CHAR_SERIAL_NUMBER_INIT_LEN			0x0f
@@ -512,7 +512,7 @@ void blp_disconnection(void);
 //  <s.20>Hardware Revision
 //  <i>String Descriptor describing Hardware Revision.
 //	<id> default_hardware_revision
-#define DEFAULT_HARDWARE_REVISION					("Rev A")
+#define DEFAULT_HARDWARE_REVISION			("Rev A")
 
 /** @brief User should set the length based on  DEFAULT_HARDWARE_REVISION*/
 #define DIS_CHAR_HARDWARE_REVISION_INIT_LEN		0x05
@@ -524,7 +524,7 @@ void blp_disconnection(void);
 //  <s.20>Software Revision
 //  <i>String Descriptor describing Software Revision.
 //	<id> default_software_revision
-#define DEFAULT_SOFTWARE_REVISION					("SW_BETA")
+#define DEFAULT_SOFTWARE_REVISION			("SW_BETA")
 
 /** @brief User should set the length based on  DEFAULT_SOFTWARE_REVISION*/
 #define DIS_CHAR_SOFTWARE_REVISION_INIT_LEN		0x07
@@ -536,7 +536,7 @@ void blp_disconnection(void);
 //  <s.20>Firmware Revision
 //  <i>String Descriptor describing Firmware Revision.
 //	<id> default_firmware_reivsion
-#define DEFAULT_FIRMWARE_REIVSION					("FW_BETA")
+#define DEFAULT_FIRMWARE_REIVSION			("FW_BETA")
 
 /** @brief User should set the length based on  DEFAULT_FIRMWARE_REIVSION*/
 #define DIS_CHAR_FIRMWARE_REIVSION_INIT_LEN		0x07
@@ -545,7 +545,7 @@ void blp_disconnection(void);
 #define DIS_CHAR_FIRMWARE_REIVSION_MAX_LEN		0x14
 
 /** @brief number of device information service characteristics */
-#define DIS_TOTAL_CHARATERISTIC_NUM             0x09
+#define DIS_TOTAL_CHARATERISTIC_NUM          		0x09
 
 /** @brief system id characteristic initial length*/
 #define DIS_CHAR_SYSTEM_ID_INIT_LEN sizeof(system_id_char_value_t)
@@ -554,10 +554,10 @@ void blp_disconnection(void);
 #define DIS_CHAR_SYSTEM_ID_MAX_LEN	sizeof(system_id_char_value_t)
 
 /** @brief PnP id characteristic initial length */
-#define DIS_CHAR_PNP_ID_INIT_LEN				0x07
+#define DIS_CHAR_PNP_ID_INIT_LEN			0x07
 
 /** @brief PnP id characteristic maximum length */
-#define DIS_CHAR_PNP_ID_MAX_LEN					0x07
+#define DIS_CHAR_PNP_ID_MAX_LEN				0x07
 
 /** @brief IEEE regulatory certification data list characteristic minimum length */
 #define DIS_CHAR_IEEE_REG_CERT_DATA_LIST_INIT_LEN	0x01
@@ -567,15 +567,15 @@ void blp_disconnection(void);
 
 /** @brief PnP ID characteristic value configure by user*/
 #define PNP_ID_VENDOR_ID_SOURCE		0x01
-#define PNP_ID_VENDOR_ID			0x2222
-#define PNP_ID_PRODUCT_ID			0x3333
+#define PNP_ID_VENDOR_ID		0x2222
+#define PNP_ID_PRODUCT_ID		0x3333
 #define PNP_ID_PRODUCT_VERSION		0x0001
 
 /** @brief system ID characteristic default values */
 #define SYSTEM_ID_MANUFACTURER_ID_LEN	0x05
-#define SYSTEM_ID_ORG_UNIQUE_ID_LEN		0x03	
-#define SYSTEM_ID_MANUFACTURER_ID		"\x00\x00\x00\x00\x00"
-#define SYSTEM_ID_ORG_UNIQUE_ID			"\x00\x04\x25"
+#define SYSTEM_ID_ORG_UNIQUE_ID_LEN	0x03	
+#define SYSTEM_ID_MANUFACTURER_ID	"\x00\x00\x00\x00\x00"
+#define SYSTEM_ID_ORG_UNIQUE_ID		"\x00\x04\x25"
 
 /** @brief Macro used for updating manufacturing string after defining the service using dis_primary_service_define*/
 #define UPDATE_MANUFACTURER_STRING(ptr,info_data, conn_handle) do {  \
