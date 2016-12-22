@@ -81,36 +81,36 @@ uint32_t ulfrco_count=0;
 
 // I2C addresses for the light sensor
 #define SLAVE_ADDRESS    	    0x39
-#define COMMAND    	  		    0x80    // Command register
-#define CONTROL  				      0x00
-#define TIMING  				      0x01
-#define THRESHLOWLOW  			  0x02
-#define THRESHLOWHIGH  			  0x03
-#define THRESHHIGHLOW  			  0x04
-#define THRESHHIGHHIGH  		  0x05
-#define INTERRUPT  				    0x06
-#define CRC  					        0x08
-#define ID  					        0x0A
-#define DATA0LOW  				    0x0C
-#define DATA0HIGH  				    0x0D
-#define DATA1LOW  				    0x0E
-#define DATA1HIGH  				    0x0F
+#define COMMAND    	  	    0x80   // Command register
+#define CONTROL  		    0x00
+#define TIMING  		    0x01
+#define THRESHLOWLOW  		    0x02
+#define THRESHLOWHIGH  		    0x03
+#define THRESHHIGHLOW  		    0x04
+#define THRESHHIGHHIGH  	    0x05
+#define INTERRUPT  		    0x06
+#define CRC  			    0x08
+#define ID  			    0x0A
+#define DATA0LOW  		    0x0C
+#define DATA0HIGH  		    0x0D
+#define DATA1LOW  		    0x0E
+#define DATA1HIGH  		    0x0F
 
-#define PERSISTENCE 			0x04
-#define INTR					    0x01		// INTR bits in the interrupt register of TSL2561
-#define INTEG					    0x02		// integration time is set to 101 ms
+#define PERSISTENCE 		    0x04
+#define INTR			    0x01		// INTR bits in the interrupt register of TSL2561
+#define INTEG			    0x02		// integration time is set to 101 ms
 
 
 // I2C addresses for bme sensor
-#define BME_SLAVE_ADDR				  0x76
+#define BME_SLAVE_ADDR		    0x76
 
 #define BME_CHIP_ID_REGISTER		0xD0
-#define BME_CHIP_ID_DEFAULT			0x60
-#define BME_CTRL_HUM				    0xF2
-#define BME_CTRL_MEAS				    0xF4
-#define BME_CONFIG					    0xF5
-#define BME_MODE_NORMAL				  0x03 	//reads sensors at set interval
-#define BME_MODE_FORCED				  0x01 	//reads sensors once when you write this register
+#define BME_CHIP_ID_DEFAULT	 	0x60
+#define BME_CTRL_HUM			0xF2
+#define BME_CTRL_MEAS			0xF4
+#define BME_CONFIG			0xF5
+#define BME_MODE_NORMAL			0x03 	//reads sensors at set interval
+#define BME_MODE_FORCED			0x01 	//reads sensors once when you write this register
 
 
 // for BME sensor
@@ -160,7 +160,7 @@ char text[11];
 unsigned int lowestEnergyMode[5];
 
 DMA_CB_TypeDef cb;		/* DMA callback structure */
-bool transferActive;	/* Transfer Flag */
+bool transferActive;		/* Transfer Flag */
 
 /* ADC Transfer Data */
 #define ADCSAMPLES                500
@@ -170,12 +170,12 @@ volatile uint16_t ramBufferAdcData[ADCSAMPLES];
 int dmaCount = 0;       //Number of counts using dma
 int adcCount = 0;       // Number of counts without dma
 
-long sum = 0;         // sum of adc results with dma
-float average = 0.0; // average of 1000 transfers
+long sum = 0;          // sum of adc results with dma
+float average = 0.0;   // average of 1000 transfers
 
 
-long sum1 = 0;         // sum of adc results without dma
-float average1 = 0.0; // average of 1000 transfers
+long sum1 = 0;         	      // sum of adc results without dma
+float average1 = 0.0; 	      // average of 1000 transfers
 uint8_t integer_average = 0;  //typecasting the average to extract integer part
 uint16_t average_fractional = 0;
 uint8_t average_fractional_2 = 0;	//typecasting the average to extract fractional part
@@ -1056,7 +1056,6 @@ void LESENSE_IRQHandler( void )
 
   /* Need to reset RTC counter so we don't get new calibration event right after buttons are pushed/released. */
   RTC_CounterReset();
-
 }
 
 
@@ -1073,7 +1072,6 @@ void setupI2C0(void)
   GPIO_PinModeSet(I2C0_SDA_PORT, I2C0_SDA_PIN, gpioModeWiredAnd, 1);
   GPIO_PinModeSet(I2C0_SCL_PORT, I2C0_SCL_PIN, gpioModeWiredAnd, 1);
 
-
  for (int i = 0; i < 9; i++)
     {
       GPIO_PinModeSet(I2C0_SCL_PORT, I2C0_SCL_PIN, gpioModeWiredAnd, 0);
@@ -1087,7 +1085,6 @@ void setupI2C0(void)
 
   /* Initializing the I2C */
   I2C_Init(I2C0, &i2c_Init);
-
 
   if (I2C0->STATE & I2C_STATE_BUSY) //check if busy, if busy then abort
   {
@@ -1107,12 +1104,11 @@ I2C0->IFC = I2C_IFC_START;  				 //check for start flag in IF reg and then clear
 
 while((I2C0->IF & I2C_IF_ACK) == 0);
 I2C0->IFC = I2C_IFC_ACK;
-
 I2C0 -> TXDATA = addr;                    // loading command register value
 while((I2C0->IF & I2C_IF_ACK) == 0);
 I2C0->IFC = I2C_IFC_ACK;
 
-I2C0 -> TXDATA = data;					  //loading data value
+I2C0 -> TXDATA = data;			  //loading data value
 while((I2C0->IF & I2C_IF_ACK) == 0);
 I2C0->IFC = I2C_IFC_ACK;
 
@@ -1125,68 +1121,67 @@ I2C0->IFC=I2C_IFC_MSTOP;
 
 uint16_t I2C0_Read(uint8_t addr){
 	  // addr is the command register address
-		uint8_t reg_address = addr;
+	uint8_t reg_address = addr;
+	I2C0 -> TXDATA = (BME_SLAVE_ADDR << 1 | 0);	//0 is for write
+	I2C0 -> CMD = I2C_CMD_START;
+	I2C0 -> IFC = I2C_IFC_START;
 
-		I2C0 -> TXDATA = (BME_SLAVE_ADDR << 1 | 0);	//0 is for write
-		I2C0 -> CMD = I2C_CMD_START;
-		I2C0 -> IFC = I2C_IFC_START;
+	while((I2C0->IF & I2C_IF_ACK) == 0);
+	I2C0 -> IFC = I2C_IFC_ACK; //Clear ACK flag in IFC
 
-		while((I2C0->IF & I2C_IF_ACK) == 0);
-		I2C0 -> IFC = I2C_IFC_ACK; //Clear ACK flag in IFC
+	I2C0 -> TXDATA = reg_address;                    // loading command register value
+	while((I2C0->IF & I2C_IF_ACK) == 0);
+	I2C0->IFC = I2C_IFC_ACK;
 
-		I2C0 -> TXDATA = reg_address;                    // loading command register value
-		while((I2C0->IF & I2C_IF_ACK) == 0);
-		I2C0->IFC = I2C_IFC_ACK;
+	I2C0 -> CMD = I2C_CMD_START;			// sr bit
+	I2C0 -> TXDATA = (BME_SLAVE_ADDR << 1 | 1);	//1 is for read
 
-		I2C0 -> CMD = I2C_CMD_START;			// sr bit
-		I2C0 -> TXDATA = (BME_SLAVE_ADDR << 1 | 1);	//1 is for read
+	while((I2C0->IF & I2C_IF_ACK) == 0);
+	I2C0->IFC = I2C_IFC_ACK;
 
-		while((I2C0->IF & I2C_IF_ACK) == 0);
-		I2C0->IFC = I2C_IFC_ACK;
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
+	data0 =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_NACK;		//send NACK to inform the slave that we don't need more data
 
-		while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-	  data0 =  I2C0->RXDATA;
-	  I2C0->CMD =I2C_CMD_NACK;		//send NACK to inform the slave that we don't need more data
+	I2C0->CMD = I2C_CMD_STOP;
+	while ((I2C0->IF & I2C_IF_MSTOP) ==  0);
+	I2C0->IFC=I2C_IFC_MSTOP;          // check for MSTOP and then clear it
 
-	  I2C0->CMD = I2C_CMD_STOP;
-	  while ((I2C0->IF & I2C_IF_MSTOP) ==  0);
-	  I2C0->IFC=I2C_IFC_MSTOP;          // check for MSTOP and then clear it
-
-		return data0;
+	return data0;
 }
 
 
 void I2C0_sensor(void){
 
-		  // 0x88 is the read calibration register address
-			uint8_t reg_address = 0x88;
+	// 0x88 is the read calibration register address
+	uint8_t reg_address = 0x88;
 
-			I2C0 -> TXDATA = (BME_SLAVE_ADDR << 1 | 0);	//0 is for write
-			I2C0 -> CMD = I2C_CMD_START;
-			I2C0 -> IFC = I2C_IFC_START;
+	I2C0 -> TXDATA = (BME_SLAVE_ADDR << 1 | 0);	//0 is for write
+	I2C0 -> CMD = I2C_CMD_START;
+	I2C0 -> IFC = I2C_IFC_START;
 
-			while((I2C0->IF & I2C_IF_ACK) == 0);
-			I2C0 -> IFC = I2C_IFC_ACK; //Clear ACK flag in IFC
+	while((I2C0->IF & I2C_IF_ACK) == 0);
+	I2C0 -> IFC = I2C_IFC_ACK; //Clear ACK flag in IFC
 
-			I2C0 -> TXDATA = reg_address;                    // loading command register value
-			while((I2C0->IF & I2C_IF_ACK) == 0);
-			I2C0->IFC = I2C_IFC_ACK;
+	I2C0 -> TXDATA = reg_address;                    // loading command register value
+	while((I2C0->IF & I2C_IF_ACK) == 0);
+	I2C0->IFC = I2C_IFC_ACK;
 
-			I2C0 -> CMD = I2C_CMD_START;			// sr bit
-			I2C0 -> TXDATA = (BME_SLAVE_ADDR << 1 | 1);	//1 is for read
+	I2C0 -> CMD = I2C_CMD_START;			// sr bit
+	I2C0 -> TXDATA = (BME_SLAVE_ADDR << 1 | 1);	//1 is for read
 
-			while((I2C0->IF & I2C_IF_ACK) == 0);
-			I2C0->IFC = I2C_IFC_ACK;
+	while((I2C0->IF & I2C_IF_ACK) == 0);
+	I2C0->IFC = I2C_IFC_ACK;
 
-			while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-		    data0 =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_NACK;		//send NACK to inform the slave that we don't need more data
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
+	data0 =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_NACK;		//send NACK to inform the slave that we don't need more data
 
-		    I2C0->CMD = I2C_CMD_STOP;
-		  	while ((I2C0->IF & I2C_IF_MSTOP) ==  0);
-		  	I2C0->IFC=I2C_IFC_MSTOP;          // check for MSTOP and then clear it
+	I2C0->CMD = I2C_CMD_STOP;
+	while ((I2C0->IF & I2C_IF_MSTOP) ==  0);
+	I2C0->IFC=I2C_IFC_MSTOP;          // check for MSTOP and then clear it
 
-	}
+}
 
 
 
@@ -1195,40 +1190,38 @@ void I2C0_sensor(void){
  **************************************************************************/
 uint16_t I2C1_Read(uint8_t addr){
 
-	    // addr is the command register address
-		uint8_t address = addr;
+	// addr is the command register address
+	uint8_t address = addr;
 
-		I2C1 -> TXDATA = (SLAVE_ADDRESS << 1 | 0);	//0 is for write
-		I2C1 -> CMD = I2C_CMD_START;
-		I2C1 -> IFC = I2C_IFC_START;
+	I2C1 -> TXDATA = (SLAVE_ADDRESS << 1 | 0);	//0 is for write
+	I2C1 -> CMD = I2C_CMD_START;
+	I2C1 -> IFC = I2C_IFC_START;
 
-		while((I2C1->IF & I2C_IF_ACK) == 0);
-		I2C1 -> IFC = I2C_IFC_ACK; //Clear ACK flag in IFC
+	while((I2C1->IF & I2C_IF_ACK) == 0);
+	I2C1 -> IFC = I2C_IFC_ACK; //Clear ACK flag in IFC
+	I2C1 -> TXDATA = address;                    // loading command register value
+	while((I2C1->IF & I2C_IF_ACK) == 0);
+	I2C1->IFC = I2C_IFC_ACK;
 
-		I2C1 -> TXDATA = address;                    // loading command register value
-		while((I2C1->IF & I2C_IF_ACK) == 0);
-		I2C1->IFC = I2C_IFC_ACK;
+	I2C1 -> CMD = I2C_CMD_START;			// sr bit
+	I2C1 -> TXDATA = (SLAVE_ADDRESS << 1 | 1);	//1 is for read
 
+	while((I2C1->IF & I2C_IF_ACK) == 0);
+	I2C1->IFC = I2C_IFC_ACK;
 
-		I2C1 -> CMD = I2C_CMD_START;			// sr bit
-		I2C1 -> TXDATA = (SLAVE_ADDRESS << 1 | 1);	//1 is for read
+	while ((I2C1->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
+	data0 =  I2C1->RXDATA;
+	I2C1->CMD =I2C_CMD_ACK;
 
-		while((I2C1->IF & I2C_IF_ACK) == 0);
-		I2C1->IFC = I2C_IFC_ACK;
+	while ((I2C1->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
+	data1 =  I2C1->RXDATA;
+	I2C1->CMD =I2C_CMD_NACK;		//send NACK to inform the slave that we don't need more data
 
-		while ((I2C1->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-	  data0 =  I2C1->RXDATA;
-		I2C1->CMD =I2C_CMD_ACK;
+	I2C1->CMD = I2C_CMD_STOP;
+	while ((I2C1->IF & I2C_IF_MSTOP) ==  0);
+	I2C1->IFC=I2C_IFC_MSTOP;      // check for MSTOP and then clear it
 
-	  while ((I2C1->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
-	  data1 =  I2C1->RXDATA;
-	  I2C1->CMD =I2C_CMD_NACK;		//send NACK to inform the slave that we don't need more data
-
-	  I2C1->CMD = I2C_CMD_STOP;
-	  while ((I2C1->IF & I2C_IF_MSTOP) ==  0);
-	  I2C1->IFC=I2C_IFC_MSTOP;      // check for MSTOP and then clear it
-
-		return data1*256 + data0;			//returning the ADC value
+	return data1*256 + data0;			//returning the ADC value
 }
 
 
@@ -1480,235 +1473,235 @@ bool BME_verify_ChipId(void){
 //reads the calibration registers
 void BME_readCalibrationRegisters(void){
 
-			uint8_t reg_address = 0x88;
+	uint8_t reg_address = 0x88;
 
-			I2C0 -> TXDATA = (BME_SLAVE_ADDR << 1 | 0);	//0 is for write
-			I2C0 -> CMD = I2C_CMD_START;
-			I2C0 -> IFC = I2C_IFC_START;
+	I2C0 -> TXDATA = (BME_SLAVE_ADDR << 1 | 0);	//0 is for write
+	I2C0 -> CMD = I2C_CMD_START;
+	I2C0 -> IFC = I2C_IFC_START;
 
-			while((I2C0->IF & I2C_IF_ACK) == 0);
-			I2C0 -> IFC = I2C_IFC_ACK; //Clear ACK flag in IFC
+	while((I2C0->IF & I2C_IF_ACK) == 0);
+	I2C0 -> IFC = I2C_IFC_ACK; //Clear ACK flag in IFC
 
-			I2C0 -> TXDATA = reg_address;                    // loading command register value
-			while((I2C0->IF & I2C_IF_ACK) == 0);
-			I2C0->IFC = I2C_IFC_ACK;
+	I2C0 -> TXDATA = reg_address;                    // loading command register value
+	while((I2C0->IF & I2C_IF_ACK) == 0);
+	I2C0->IFC = I2C_IFC_ACK;
 
-			I2C0 -> CMD = I2C_CMD_START;			// sr bit
-			I2C0 -> TXDATA = (BME_SLAVE_ADDR << 1 | 1);	//1 is for read
+	I2C0 -> CMD = I2C_CMD_START;			// sr bit
+	I2C0 -> TXDATA = (BME_SLAVE_ADDR << 1 | 1);	//1 is for read
 
-			while((I2C0->IF & I2C_IF_ACK) == 0);
-			I2C0->IFC = I2C_IFC_ACK;
+	while((I2C0->IF & I2C_IF_ACK) == 0);
+	I2C0->IFC = I2C_IFC_ACK;
 
-			while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-		    lsb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
+	lsb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;
 
-		  	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
-		  	msb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;		//send ACK
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
+	msb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;		//send ACK
 
-		    calib_dig_T1 = (msb << 8) | lsb;
+	calib_dig_T1 = (msb << 8) | lsb;
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-		    lsb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
+	lsb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
-		    msb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;		//send ACK
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
+	msb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;		//send ACK
 
-		    calib_dig_T2 = (msb << 8) | lsb;
+	calib_dig_T2 = (msb << 8) | lsb;
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-		    lsb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
+	lsb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
-		    msb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;		//send ACK
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
+	msb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;		//send ACK
 
-		    calib_dig_T3 = (msb << 8) | lsb;
+	calib_dig_T3 = (msb << 8) | lsb;
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-		    lsb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
+	lsb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
-		    msb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;		//send ACK
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
+	msb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;		//send ACK
 
-		    calib_dig_P1 = (msb << 8) | lsb;
+	calib_dig_P1 = (msb << 8) | lsb;
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-		    lsb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
+	lsb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
-		    msb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;		//send ACK
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
+	msb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;		//send ACK
 
-		    calib_dig_P2 = (msb << 8) | lsb;
+	calib_dig_P2 = (msb << 8) | lsb;
+	
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
+	lsb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-		    lsb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
+	msb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;		//send ACK
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
-		    msb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;		//send ACK
+	calib_dig_P3 = (msb << 8) | lsb;
 
-		    calib_dig_P3 = (msb << 8) | lsb;
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
+	lsb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-		    lsb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
+	msb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;		//send ACK
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
-		    msb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;		//send ACK
+	calib_dig_P4 = (msb << 8) | lsb;
 
-		    calib_dig_P4 = (msb << 8) | lsb;
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
+	lsb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-		    lsb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
+	msb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;		//send ACK
+	calib_dig_P5 = (msb << 8) | lsb;
+	
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
+	lsb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
-		    msb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;		//send ACK
-		    calib_dig_P5 = (msb << 8) | lsb;
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-		    lsb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
+	msb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;		//send ACK
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
-		    msb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;		//send ACK
+	calib_dig_P6 = (msb << 8) | lsb;
 
-		    calib_dig_P6 = (msb << 8) | lsb;
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
+	lsb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-		    lsb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
+	msb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;		//send ACK
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
-		    msb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;		//send ACK
+	calib_dig_P7 = (msb << 8) | lsb;
 
-		    calib_dig_P7 = (msb << 8) | lsb;
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
+	lsb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-		    lsb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
+	msb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;		//send ACK
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
-		    msb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;		//send ACK
+	calib_dig_P8 = (msb << 8) | lsb;
 
-		    calib_dig_P8 = (msb << 8) | lsb;
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
+	lsb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-		  	lsb =  I2C0->RXDATA;
-		  	I2C0->CMD =I2C_CMD_ACK;
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
+	msb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_NACK;		//send NACK
 
-		  	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
-		  	msb =  I2C0->RXDATA;
-		  	I2C0->CMD =I2C_CMD_NACK;		//send NACK
+	calib_dig_P9 = (msb << 8) | lsb;
 
-		  	calib_dig_P9 = (msb << 8) | lsb;
+	I2C0->CMD = I2C_CMD_STOP;ww
+	while ((I2C0->IF & I2C_IF_MSTOP) ==  0);
+	I2C0->IFC=I2C_IFC_MSTOP;          // check for MSTOP and then clear it
 
-		    I2C0->CMD = I2C_CMD_STOP;
-		  	while ((I2C0->IF & I2C_IF_MSTOP) ==  0);
-		  	I2C0->IFC=I2C_IFC_MSTOP;          // check for MSTOP and then clear it
+	reg_address = 0xA1;
+	I2C0 -> TXDATA = (BME_SLAVE_ADDR << 1 | 0);	//0 is for write
+	I2C0 -> CMD = I2C_CMD_START;
+	I2C0 -> IFC = I2C_IFC_START;
 
-		  	reg_address = 0xA1;
-		  	I2C0 -> TXDATA = (BME_SLAVE_ADDR << 1 | 0);	//0 is for write
-		  	I2C0 -> CMD = I2C_CMD_START;
-		  	I2C0 -> IFC = I2C_IFC_START;
+	while((I2C0->IF & I2C_IF_ACK) == 0);
+	I2C0 -> IFC = I2C_IFC_ACK; //Clear ACK flag in IFC
 
-		  	while((I2C0->IF & I2C_IF_ACK) == 0);
-		  	I2C0 -> IFC = I2C_IFC_ACK; //Clear ACK flag in IFC
+	I2C0 -> TXDATA = reg_address;                    // loading command register value
+	while((I2C0->IF & I2C_IF_ACK) == 0);
+	I2C0->IFC = I2C_IFC_ACK;
 
-		  	I2C0 -> TXDATA = reg_address;                    // loading command register value
-		  	while((I2C0->IF & I2C_IF_ACK) == 0);
-		  	I2C0->IFC = I2C_IFC_ACK;
+	I2C0 -> CMD = I2C_CMD_START;			// sr bit
+	I2C0 -> TXDATA = (BME_SLAVE_ADDR << 1 | 1);	//1 is for read
 
-		  	I2C0 -> CMD = I2C_CMD_START;			// sr bit
-		  	I2C0 -> TXDATA = (BME_SLAVE_ADDR << 1 | 1);	//1 is for read
+	while((I2C0->IF & I2C_IF_ACK) == 0);
+	I2C0->IFC = I2C_IFC_ACK;
 
-		  	while((I2C0->IF & I2C_IF_ACK) == 0);
-		  	I2C0->IFC = I2C_IFC_ACK;
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
+	msb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_NACK;
 
-		  	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-		  	msb =  I2C0->RXDATA;
-		  	I2C0->CMD =I2C_CMD_NACK;
+	calib_dig_H1 = msb;
 
-		  	calib_dig_H1 = msb;
+	I2C0->CMD = I2C_CMD_STOP;
+	while ((I2C0->IF & I2C_IF_MSTOP) ==  0);
+	I2C0->IFC=I2C_IFC_MSTOP;          // check for MSTOP and then clear it
 
-		    I2C0->CMD = I2C_CMD_STOP;
-		  	while ((I2C0->IF & I2C_IF_MSTOP) ==  0);
-		  	I2C0->IFC=I2C_IFC_MSTOP;          // check for MSTOP and then clear it
+	reg_address = 0xE1;
 
-		  	reg_address = 0xE1;
+	I2C0 -> TXDATA = (BME_SLAVE_ADDR << 1 | 0);	//0 is for write
+	I2C0 -> CMD = I2C_CMD_START;
+	I2C0 -> IFC = I2C_IFC_START;
 
-		  	I2C0 -> TXDATA = (BME_SLAVE_ADDR << 1 | 0);	//0 is for write
-		  	I2C0 -> CMD = I2C_CMD_START;
-		  	I2C0 -> IFC = I2C_IFC_START;
+	while((I2C0->IF & I2C_IF_ACK) == 0);
+	I2C0 -> IFC = I2C_IFC_ACK; 	//Clear ACK flag in IFC
 
-		  	while((I2C0->IF & I2C_IF_ACK) == 0);
-		  	I2C0 -> IFC = I2C_IFC_ACK; 	//Clear ACK flag in IFC
+	I2C0 -> TXDATA = reg_address;                    // loading command register value
+	while((I2C0->IF & I2C_IF_ACK) == 0);
+	I2C0->IFC = I2C_IFC_ACK;
 
-		  	I2C0 -> TXDATA = reg_address;                    // loading command register value
-		  	while((I2C0->IF & I2C_IF_ACK) == 0);
-		  	I2C0->IFC = I2C_IFC_ACK;
+	I2C0 -> CMD = I2C_CMD_START;			// sr bit
+	I2C0 -> TXDATA = (BME_SLAVE_ADDR << 1 | 1);	//1 is for read
 
-		  	I2C0 -> CMD = I2C_CMD_START;			// sr bit
-		  	I2C0 -> TXDATA = (BME_SLAVE_ADDR << 1 | 1);	//1 is for read
+	while((I2C0->IF & I2C_IF_ACK) == 0);
+	I2C0->IFC = I2C_IFC_ACK;
 
-		  	while((I2C0->IF & I2C_IF_ACK) == 0);
-		  	I2C0->IFC = I2C_IFC_ACK;
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
+	lsb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-		    lsb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
+	msb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;		//send ACK
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
-		    msb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;		//send ACK
+	calib_dig_H2 = (msb << 8) | lsb;
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
+	lsb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;		//send ACK
 
-		    calib_dig_H2 = (msb << 8) | lsb;
+	calib_dig_H3 = lsb;
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
-		    lsb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;		//send ACK
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
+	lsb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;
 
-		    calib_dig_H3 = lsb;
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
+	msb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;		//send ACK
+	
+	calib_dig_H4 = (lsb << 4) | (0x0f & msb);
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-		    lsb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
+	lsb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;		//send ACK
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
-		    msb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;		//send ACK
+	calib_dig_H5 = (lsb << 4) | ((msb >> 4) & 0x0f);
 
-		    calib_dig_H4 = (lsb << 4) | (0x0f & msb);
+	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
+	lsb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_NACK;		//send NACK
 
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
-		    lsb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_ACK;		//send ACK
+	calib_dig_H6 = lsb;
 
-		    calib_dig_H5 = (lsb << 4) | ((msb >> 4) & 0x0f);
-
-		    while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);//check for flag to check data in recieve buffer, if set then get data from recieve buffer
-		    lsb =  I2C0->RXDATA;
-		    I2C0->CMD =I2C_CMD_NACK;		//send NACK
-
-		    calib_dig_H6 = lsb;
-
-		    I2C0->CMD = I2C_CMD_STOP;
-		  	while ((I2C0->IF & I2C_IF_MSTOP) ==  0);
-		  	I2C0->IFC=I2C_IFC_MSTOP;          // check for MSTOP and then clear it
+	I2C0->CMD = I2C_CMD_STOP;
+	while ((I2C0->IF & I2C_IF_MSTOP) ==  0);
+	I2C0->IFC=I2C_IFC_MSTOP;          // check for MSTOP and then clear it
 }
 
 
@@ -1732,50 +1725,50 @@ void BME_readSensorData(void){
 	I2C0->IFC = I2C_IFC_ACK;
 
 	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-  msb =  I2C0->RXDATA;
-  I2C0->CMD =I2C_CMD_ACK;
+  	msb =  I2C0->RXDATA;
+  	I2C0->CMD =I2C_CMD_ACK;
 
-  while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-  lsb =  I2C0->RXDATA;
-  I2C0->CMD =I2C_CMD_ACK;
+  	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
+  	lsb =  I2C0->RXDATA;
+  	I2C0->CMD =I2C_CMD_ACK;
 
-  while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-  xlsb =  I2C0->RXDATA;
-  I2C0->CMD =I2C_CMD_ACK;
+  	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
+  	xlsb =  I2C0->RXDATA;
+  	I2C0->CMD =I2C_CMD_ACK;
 
 	//raw pressure data
-  raw_pres = (msb << 12) | (lsb << 4) | (xlsb >> 4);
+	raw_pres = (msb << 12) | (lsb << 4) | (xlsb >> 4);
 
-  //FA - Temperature
-  while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-  msb =  I2C0->RXDATA;
-  I2C0->CMD =I2C_CMD_ACK;
+	//FA - Temperature
+  	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
+  	msb =  I2C0->RXDATA;
+  	I2C0->CMD =I2C_CMD_ACK;
 
-  while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-  lsb =  I2C0->RXDATA;
-  I2C0->CMD =I2C_CMD_ACK;
+  	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
+  	lsb =  I2C0->RXDATA;
+  	I2C0->CMD =I2C_CMD_ACK;
 
-  while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-  xlsb =  I2C0->RXDATA;
-  I2C0->CMD =I2C_CMD_ACK;
+  	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
+  	xlsb =  I2C0->RXDATA;
+	I2C0->CMD =I2C_CMD_ACK;
 
-  //raw temperature data
-  raw_temp = (msb << 12) | (lsb << 4) | (xlsb >> 4);
+	//raw temperature data
+  	raw_temp = (msb << 12) | (lsb << 4) | (xlsb >> 4);
 
-  //FD - Humidity
-  while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-  msb =  I2C0->RXDATA;
-  I2C0->CMD =I2C_CMD_ACK;
+  	//FD - Humidity
+  	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
+  	msb =  I2C0->RXDATA;
+  	I2C0->CMD =I2C_CMD_ACK;
 
-  while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
-  lsb =  I2C0->RXDATA;
-  I2C0->CMD =I2C_CMD_NACK;
+  	while ((I2C0->IF & I2C_IF_RXDATAV) ==  0);  //if buffer is set, get data from receive buffer
+  	lsb =  I2C0->RXDATA;
+  	I2C0->CMD =I2C_CMD_NACK;
 
-  //raw humidity data
-  raw_hum = (msb << 8) | lsb;
+ 	//raw humidity data
+  	raw_hum = (msb << 8) | lsb;
 
-  //stopping the module
-  I2C0->CMD = I2C_CMD_STOP;
+	//stopping the module
+ 	I2C0->CMD = I2C_CMD_STOP;
 	while ((I2C0->IF & I2C_IF_MSTOP) ==  0);
 	I2C0->IFC=I2C_IFC_MSTOP;          // check for MSTOP and then clear it
 
@@ -1848,11 +1841,9 @@ unsigned long int BME_calibration_Hum(signed long int adc_H){
 void BME_readActualSensorData(void){
 	//read raw sensor values
 	BME_readSensorData();
-
 	temp_act = BME_calibration_Temp(raw_temp);
 	press_act = BME_calibration_Press(raw_pres);
 	hum_act = BME_calibration_Hum(raw_hum);
-
 }
 
 //getting actual sensor values after calibration
@@ -2047,7 +2038,7 @@ void initLeuart(void)
 
 	while (LEUART0->SYNCBUSY) { }
 
-  LEUART_IntEnable(LEUART0,LEUART_IEN_TXBL);			/*Enabling the TXBL interrupts*/
+	LEUART_IntEnable(LEUART0,LEUART_IEN_TXBL);			/*Enabling the TXBL interrupts*/
 	NVIC_EnableIRQ(LEUART0_IRQn);
 
 }
